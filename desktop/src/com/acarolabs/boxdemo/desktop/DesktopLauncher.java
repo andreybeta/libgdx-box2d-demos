@@ -1,11 +1,8 @@
 package com.acarolabs.boxdemo.desktop;
 
-import com.acarolabs.boxdemo.ChopperDemoGame;
-import com.acarolabs.boxdemo.MeshTextureDemo;
-import com.acarolabs.boxdemo.PolyBatchDemo;
+import com.acarolabs.boxdemo.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.acarolabs.boxdemo.BoxDemoGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -15,7 +12,9 @@ public class DesktopLauncher {
 
 //		new LwjglApplication(new ChopperDemoGame(), config);
 //		new LwjglApplication(new MeshTextureDemo(), config);
-		new LwjglApplication(new BoxDemoGame(), config);
+//		new LwjglApplication(new BoxDemoGame(), config);
 //		new LwjglApplication(new PolyBatchDemo(), config);
+//		new LwjglApplication(new Box2dLightTest(), config);
+		new LwjglApplication(new SimpleBox2dLights(), config);
 	}
 }
