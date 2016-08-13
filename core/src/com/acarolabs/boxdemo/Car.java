@@ -11,11 +11,11 @@ import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
  */
 public class Car {
 
-    public static final float CHASSIS_DENSITY = 10f;
-    public static final float WHEEL_DENSITY = 20f;
-    public static final float FRICTION = 100f;
-    public static final int MOTOR_SPEED = -30;
-    public static final int MAX_MOTOR_TORQUE = 500;
+    public static final float CHASSIS_DENSITY = 7f;
+    public static final float WHEEL_DENSITY = 5f;
+    public static final float FRICTION = 20f;
+    public static final int MOTOR_SPEED = -20;
+    public static final int MAX_MOTOR_TORQUE = 400;
     public final Body chassis;
     private final Body leftWheelBody;
     private final Body rightWheelBody;
@@ -31,7 +31,7 @@ public class Car {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(startPosition);
 
-        bodyDef.angularDamping = 5 ;
+        bodyDef.angularDamping = 2;
 
         this.chassis = world.createBody(bodyDef);
 
@@ -43,19 +43,19 @@ public class Car {
         chassisFixtureDef.shape = chassisShape;
         chassisFixtureDef.density = CHASSIS_DENSITY;
         chassisFixtureDef.friction = FRICTION;
-//        fixtureDef.restitution = 0.6f;
+        chassisFixtureDef.restitution = 0.6f;
 
         chassis.createFixture(chassisFixtureDef);
 
         // Wheels
 
         CircleShape wheelShape = new CircleShape();
-        wheelShape.setRadius(0.5f);
+        wheelShape.setRadius(0.8f);
 
         FixtureDef wheelFixtureDef = new FixtureDef();
         wheelFixtureDef.shape = wheelShape;
         wheelFixtureDef.density = WHEEL_DENSITY;
-        wheelFixtureDef.restitution = 0.1f;
+        //wheelFixtureDef.restitution = 1f;
         wheelFixtureDef.friction = FRICTION;
 
         this.leftWheelBody = world.createBody(bodyDef);
@@ -69,13 +69,13 @@ public class Car {
         WheelJointDef wheelJointDef = new WheelJointDef();
         wheelJointDef.bodyA = chassis;
         wheelJointDef.bodyB = leftWheelBody;
-        wheelJointDef.localAnchorA.set(-2f, -1.6f);
+        wheelJointDef.localAnchorA.set(-2f, -1.9f);
         wheelJointDef.localAxisA.set(Vector2.Y);
         //wheelJointDef.enableMotor = true;
         wheelJointDef.motorSpeed = MOTOR_SPEED;
         wheelJointDef.frequencyHz = 5;
         wheelJointDef.maxMotorTorque = MAX_MOTOR_TORQUE;
-       // wheelJointDef.dampingRatio = 5;
+        //wheelJointDef.dampingRatio = 0.5f;
 
 
         leftAxis = (WheelJoint) world.createJoint(wheelJointDef);
@@ -83,7 +83,7 @@ public class Car {
 
         wheelJointDef.bodyB = rightWheelBody;
 //        wheelJointDef.enableMotor = false;
-        wheelJointDef.localAnchorA.set(2f, -1.6f);
+        wheelJointDef.localAnchorA.set(2f, -1.9f);
         rightAxis = (WheelJoint) world.createJoint(wheelJointDef);
 
 

@@ -33,7 +33,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 	private Car car;
     private BitmapFont defaultFont;
     private Texture background;
-    private Chopper chop;
+    //private Chopper chop;
     private Mesh groundMesh;
     private ShaderProgram meshShader;
     private Texture groundTexture;
@@ -70,9 +70,9 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 
         createFont();
 
-		car = new Car(4, 4, world);
+		car = new Car(4, 5, world);
 
-        chop = new Chopper(0, 5, world);
+        //chop = new Chopper(0, 5, world);
 
 
 
@@ -120,19 +120,26 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
             0, 2,
                 10, 2,
                 15, 0,
-                20, 3,
+                20, 1,
                 30, 3,
                 40, 1,
                 50, 0,
+                80, 5,
                 80, 2,
-                90, 4,
+                90, 2,
                 100, 1,
-                200, 5,
-                300, 5,
+                120, 3,
+                150, 9,
+                160, 3,
+                180, 0,
+                250, 2,
+                270, 5,
+                290, 6,
+                330, 1,
+                340, 2,
+                360, 5,
                 400, 0,
-                500, 5,
-                550, 0,
-                550, 5
+                400, 5
         };
 
         floorShape.createChain(floorPoints);
@@ -284,7 +291,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public void render() {
-//        Gdx.gl.glClearColor(0.4f, 0.7f, 0.9f, 1);
+        Gdx.gl20.glClearColor(0.2f, 0.6f, 0.8f, 1);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 ////        Gdx.gl20.glEnable(GL20.GL_BLEND);
 ////        Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -292,7 +299,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 //        Gdx.gl.glEnable(GL20.GL_BLEND);
 //        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        Gdx.gl20.glClearColor(0, 0, 0, 1);
+//        Gdx.gl20.glClearColor(0, 0, 0, 1);
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         Gdx.gl20.glEnable(GL20.GL_BLEND);
@@ -311,7 +318,8 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         batch.setShader(meshShader);
 		batch.begin();
 
-        batch.draw(background, camera.position.x - background.getWidth()/2, camera.position.y - background.getHeight()/2);
+
+        //batch.draw(background, camera.position.x - background.getWidth()/2, camera.position.y - background.getHeight()/2);
 //		if(drawSprite) {
 //            batch.draw(sprite, sprite.getX(), sprite.getY(), sprite.getOriginX(),
 //                    sprite.getOriginY(),
@@ -362,7 +370,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 
     private void update() {
         // Step the physics simulation forward at a rate of 60hz
-        world.step(1f/60f, 6, 3);
+        world.step(1f/30f, 6, 3);
 
 //		camera.translate(
 //				car.chassis.getPosition().x ,
@@ -375,7 +383,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         );
         camera.update();
 
-        chop.update();
+        //chop.update();
         // Apply torque to the physics chassis.  At start this is 0 and will do nothing.  Controlled with [] keys
         // Torque is applied per frame instead of just once
         //chassis.applyTorque(torque,true);
@@ -390,6 +398,26 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 
         // Ditto for rotation
         sprite.setRotation((float)Math.toDegrees(body.getAngle()));
+
+
+
+        if(Gdx.input.isTouched()) {
+            if (Gdx.input.getX() < 50 && Gdx.input.getY()<50){
+                car.reset();
+            }
+            if (!car.isRunning()) {
+                car.run();
+            }
+
+            if (Gdx.input.getX() < Gdx.graphics.getWidth() / 2) {
+                car.toForward();
+            } else {
+                car.reverse();
+            }
+        } else {
+            car.stop();
+        }
+
 
         //chassis.applyForceToCenter(0, 20, true);
     }
@@ -457,13 +485,13 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 ////            chassis.applyLinearImpulse(-1f,0f);
 //        }
 //
-        if (keycode == Input.Keys.UP) {
-            chop.up();
-        }
-
-        if (keycode == Input.Keys.LEFT) {
-            chop.up();
-        }
+//        if (keycode == Input.Keys.UP) {
+//            chop.up();
+//        }
+//
+//        if (keycode == Input.Keys.LEFT) {
+//            chop.up();
+//        }
 
 //		if(keycode == Input.Keys.UP) {
 ////			chassis.applyForceToCenter(0f,11f,true);
@@ -529,13 +557,22 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 //
 //        Gdx.app.log("DOWN", "Screen X: " + x + " Screen Y: " + y);
         //chassis.applyTorque(0.4f,true);
-        if (this.car.isRunning()) {
-            this.car.stop();
-        } else {
-            this.car.run();
-        }
+//        if (screenY < Gdx.graphics.getHeight() / 2) {
+//            if (this.car.isRunning()) {
+//                this.car.stop();
+//            } else {
+//                this.car.run();
+//            }
+//        } else  if (screenX < Gdx.graphics.getWidth() / 2) {
+//            this.car.toForward();
+//        } else {
+//            this.car.reverse();
+//        }
 
-        return true;
+
+
+
+            return false;
     }
 
 	@Override
@@ -545,7 +582,8 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
+		//this.car.reset();
+	    return true;
 	}
 
 	@Override
@@ -557,5 +595,11 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 	public boolean scrolled(int amount) {
 		return false;
 	}
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+//        camera.
+    }
 }
 
