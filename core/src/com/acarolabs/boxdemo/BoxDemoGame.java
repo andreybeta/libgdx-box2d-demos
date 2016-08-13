@@ -39,6 +39,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
     private Texture groundTexture;
     private Mesh surfaceMesh;
     private Texture surfaceTexture;
+    private Truck truck;
 
     @Override
 	public void create() {
@@ -71,6 +72,8 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         createFont();
 
 		car = new Car(4, 5, world);
+
+        truck = new Truck(9,4, world);
 
         //chop = new Chopper(0, 5, world);
 
@@ -372,13 +375,20 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         // Step the physics simulation forward at a rate of 60hz
         world.step(1f/30f, 6, 3);
 
+        truck.update();
 //		camera.translate(
 //				car.chassis.getPosition().x ,
 //				car.chassis.getPosition().y
 //		);
+//        this.camera.position.set(
+//                this.car.chassis.getPosition().x * PIXELS_TO_METERS,
+//                this.car.chassis.getPosition().y * PIXELS_TO_METERS,
+//                0
+//        );
+
         this.camera.position.set(
-                this.car.chassis.getPosition().x * PIXELS_TO_METERS,
-                this.car.chassis.getPosition().y * PIXELS_TO_METERS,
+                this.truck.cart.getPosition().x * PIXELS_TO_METERS,
+                this.truck.cart.getPosition().y * PIXELS_TO_METERS,
                 0
         );
         camera.update();
