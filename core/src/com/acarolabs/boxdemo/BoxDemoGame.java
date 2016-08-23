@@ -40,6 +40,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
     private Mesh surfaceMesh;
     private Texture surfaceTexture;
     private Truck truck;
+    private Coin coin;
 
     @Override
 	public void create() {
@@ -49,9 +50,37 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         background = new Texture("blue_desert.png");
 
 		sprite = new Sprite(img);
-		sprite.setPosition(-sprite.getWidth()/2,-sprite.getHeight()/2);
+		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
 
 		world = new World(new Vector2(0, -10f),true);
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+
+                Object udata = contact.getFixtureA().getUserData();
+                if (udata != null){
+                    if (udata.toString() == "coin") {
+                        Gdx.app.log("COLISION", "coin");
+                    }
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+        });
 
 
         Gdx.input.setInputProcessor(this);
@@ -74,6 +103,8 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 		car = new Car(4, 5, world);
 
         truck = new Truck(9,4, world);
+
+        coin = new Coin(20, 3, world);
 
         //chop = new Chopper(0, 5, world);
 
@@ -306,7 +337,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         Gdx.gl20.glEnable(GL20.GL_BLEND);
-        Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        //Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
 
         update();
@@ -316,6 +347,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 		// Scale down the sprite batches projection matrix to box2D size
 		debugMatrix = batch.getProjectionMatrix().cpy().scale(PIXELS_TO_METERS,
 				PIXELS_TO_METERS, 0);
+
 
 
         batch.setShader(meshShader);
@@ -331,6 +363,8 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 //        }
 
 
+       // defaultFont.draw(batch, "ACamera X " + camera.position.x, 0, 0);
+
         defaultFont.draw(batch, "Camera X " + camera.position.x, camera.position.x - 390, camera.position.y + 300);
         defaultFont.draw(batch, "Camera X " + camera.position.y, camera.position.x - 390, camera.position.y + 290);
 
@@ -338,10 +372,6 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         defaultFont.draw(batch, "Car X " + car.chassis.getPosition().x, camera.position.x - 390, camera.position.y + 270);
         defaultFont.draw(batch, "Car Y " + car.chassis.getPosition().y, camera.position.x - 390, camera.position.y + 260);
         defaultFont.draw(batch, "Car Motor " + (car.isRunning() ? "ON" : "OFF"), camera.position.x - 390, camera.position.y + 250);
-
-
-
-
 
 
 
@@ -362,8 +392,13 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
 
         meshShader.end();
 
+        coin.render(batch);
+
         batch.end();
 
+        batch.begin();
+
+        batch.end();
 
         // Now render the physics world using our scaled down matrix
         // Note, this is strictly optional and is, as the name suggests, just for debugging purposes
@@ -389,7 +424,7 @@ public class BoxDemoGame extends ApplicationAdapter implements InputProcessor {
         this.camera.position.set(
                 this.truck.cart.getPosition().x * PIXELS_TO_METERS,
                 this.truck.cart.getPosition().y * PIXELS_TO_METERS,
-                0
+               30
         );
         camera.update();
 

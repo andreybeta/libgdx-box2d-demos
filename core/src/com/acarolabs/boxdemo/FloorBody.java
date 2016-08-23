@@ -20,8 +20,8 @@ public class FloorBody {
 
         FixtureDef floorFixtureDef = new FixtureDef();
         floorFixtureDef.shape = floorShape;
-        floorFixtureDef.density = 40f;
-        floorFixtureDef.friction = 300f;
+        floorFixtureDef.density = 4f;
+        floorFixtureDef.friction = 0.3f;
         floorFixtureDef.restitution= 0.3f;
 
         floorBody.createFixture(floorFixtureDef);
